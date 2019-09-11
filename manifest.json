@@ -1,0 +1,16 @@
+{
+  "name": "toggle-google-search",
+  "version": "0.1",
+  "description": "Toggles google search language",
+  "manifest_version": 2,
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "*://www.google.com/*",
+    "*://www.google.co.jp/*"
+  ],
+  "background": {
+    "scripts": ["out/main.js"],
+    "persistent": true
+  }
+}
