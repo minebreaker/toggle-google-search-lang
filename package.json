@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "clean": "rimraf out/*",
+    "copy": "cpx src/*.html out/",
     "watchBuild": "tsc -p tsconfig.json -w"
   },
   "license": "MIT",
-  "devDependencies": {
-    "@types/chrome": "0.0.88",
-    "rollup": "^1.21.2",
-    "typescript": "^3.6.3"
-  },
   "dependencies": {
     "lodash": "^4.17.15",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.88",
+    "cpx": "^1.5.0",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.21.2",
+    "typescript": "^3.6.3"
   }
 }

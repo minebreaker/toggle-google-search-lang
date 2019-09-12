@@ -4,13 +4,20 @@
   "description": "Toggles google search language",
   "manifest_version": 2,
   "permissions": [
+    "storage",
     "webRequest",
     "webRequestBlocking",
     "*://www.google.com/*",
     "*://www.google.co.jp/*"
   ],
+  "browser_action": {
+    "default_title": "Toggle google search language",
+    "default_popup": "out/popup.html"
+  },
   "background": {
-    "scripts": ["out/main.js"],
+    "scripts": [
+      "out/background.js"
+    ],
     "persistent": true
   }
 }
