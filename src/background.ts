@@ -4,7 +4,7 @@ import BlockingResponse = chrome.webRequest.BlockingResponse
 
 let savedLang: string
 
-const regEnglish = /^[a-zA-Z0-9\s]*$/
+const regEnglish = /^[a-zA-Z0-9\-_'"\s]*$/
 
 function rewrite(request: WebRequestBodyDetails): BlockingResponse | void {
 
