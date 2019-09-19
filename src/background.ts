@@ -1,10 +1,24 @@
 import WebRequestBodyDetails = chrome.webRequest.WebRequestBodyDetails
 import BlockingResponse = chrome.webRequest.BlockingResponse
+import LanguageDetectionResult = chrome.i18n.LanguageDetectionResult
 
 
-let savedLang: string
+function awaiting<T>(f: (cb: (result: T) => void) => void): T {
+    let result = null
+    f(r => {
+        result = r
+    })
 
-const regEnglish = /^[a-zA-Z0-9\-_'"\s]*$/
+    while(!result) {
+        // NOP
+    }
+
+    return result
+}
+
+let savedLang: Lang
+
+const regAscii = /^[\x00-\x7F]*$/
 
 function rewrite(request: WebRequestBodyDetails): BlockingResponse | void {
 
@@ -15,19 +29,29 @@ function rewrite(request: WebRequestBodyDetails): BlockingResponse | void {
         params.set("lr", "lang_en")
     } else if (savedLang === "ja") {
         params.set("lr", "lang_ja")
+    } else if (savedLang === "default") {
+        params.delete("lr")
     } else {  // Auto detect
 
-
-        // If the language is already set, leave it as is.
-        if (params.get("lr")) {
-            return
-        }
-
-        const query = params.get("q")
-        if (regEnglish.test(query || "")) {
-            params.set("lr", "lang_en")
+        const query = params.get("q") || ""
+        const detectedLang = awaiting<LanguageDetectionResult>(cb => chrome.i18n.detectLanguage(query, l => cb(l)))
+        console.log(detectedLang)
+        if (detectedLang.languages[0]) {
+            const code = detectedLang.languages[0].language
+            // After few tries, I found detectLanguage() is unreliable,
+            // Assumes it's english if not ja.
+            // Kanjis are often detected as chinese falsely, force setting japanese.
+            if (code !== 'ja' && code !== 'zh') {
+                params.set("lr", "lang_en")
+            } else {
+                params.set("lr", `lang_${code}`)
+            }
         } else {
-            params.set("lr", "lang_ja")
+            if (regAscii.test(query)) {
+                params.set("lr", "lang_en")
+            } else {
+                params.set("lr", "lang_ja")
+            }
         }
     }
 
