@@ -1,8 +1,3 @@
-import WebRequestBodyDetails = chrome.webRequest.WebRequestBodyDetails
-import BlockingResponse = chrome.webRequest.BlockingResponse
-import LanguageDetectionResult = chrome.i18n.LanguageDetectionResult
-
-
 function awaiting<T>(f: (cb: (result: T) => void) => void): T {
     let result = null
     f(r => {
@@ -20,7 +15,7 @@ let savedLang: Lang
 
 const regAscii = /^[\x00-\x7F]*$/
 
-function rewrite(request: WebRequestBodyDetails): BlockingResponse | void {
+function rewrite(request: any): any | void {
 
     const url = new URL(request.url)
     const params = url.searchParams
@@ -34,7 +29,7 @@ function rewrite(request: WebRequestBodyDetails): BlockingResponse | void {
     } else {  // Auto detect
 
         const query = params.get("q") || ""
-        const detectedLang = awaiting<LanguageDetectionResult>(cb => chrome.i18n.detectLanguage(query, l => cb(l)))
+        const detectedLang = awaiting<any>(cb => chrome.i18n.detectLanguage(query, (l: any) => cb(l)))
         console.log(detectedLang)
         if (detectedLang.languages[0]) {
             const code = detectedLang.languages[0].language
@@ -69,13 +64,7 @@ chrome.webRequest.onBeforeRequest.addListener(rewrite,
     ["blocking"]
 )
 
-namespace chrome.storage {
-    export interface StorageArea {
-        onChanged: StorageChangedEvent
-    }
-}
-
-chrome.storage.sync.onChanged.addListener(result => {
+chrome.storage.sync.onChanged.addListener((result: any) => {
     if (result && result.lang && result.lang.newValue) {
         savedLang = result.lang.newValue
     }

@@ -2,11 +2,11 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "esnext",
     "jsx": "react",
     "declaration": false,
     "inlineSourceMap": true,
-    "outDir": "out",
+    "outDir": "build/out",
     "newLine": "LF",
     "strict": true,
     "noFallthroughCasesInSwitch": true,

@@ -1,5 +1,7 @@
 type Lang = "auto" | "default" | "en" | "ja"
 
+declare const chrome: any
+
 function isLang(arg: any): arg is Lang {
     return arg === "auto" || arg === "default" || arg === "en" || arg === "ja"
 }
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         if (refresh) {
-            chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs: any) => {
                 if (tabs.length === 0) return
                 const tab = tabs[0]
                 if (!tab.id || !tab.active || !tab.url) return
@@ -51,7 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
         select("ja")
     })
 
-    chrome.storage.sync.get("lang", ({lang: result}) => {
+    chrome.storage.sync.get("lang", (arg: any) => {
+        const {lang: result} = arg
         if (!isLang(result)) {
             console.log(`invalid language: ${result}`)
             select("auto", false)

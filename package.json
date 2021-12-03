@@ -6,8 +6,13 @@
   "scripts": {
     "build": "npm run compile && npm run copy",
     "compile": "tsc -p tsconfig.json",
-    "clean": "rimraf out/*",
-    "copy": "cpx src/*.html out/",
+    "clean": "rimraf build",
+    "copy": "npm run copy-index && npm run copy-manifest",
+    "copy-index": "cpx src/index.html ./build/out",
+    "copy-manifest": "cpx manifest.json ./build/out",
+    "web-ext-run": "cd ./build/out && web-ext run",
+    "web-ext-build": "cd ./build/out && web-ext build --overwrite-dest",
+    "web-ext-lint": "cd ./build/out && web-ext lint",
     "watchBuild": "tsc -p tsconfig.json -w"
   },
   "license": "MIT",
@@ -15,12 +20,9 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.88",
     "cpx": "^1.5.0",
     "rimraf": "^3.0.2",
-    "rollup": "^1.21.2",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "web-ext": "^6.6.0"
   }
 }
