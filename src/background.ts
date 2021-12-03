@@ -56,8 +56,8 @@ function rewrite(request: any): any | void {
 chrome.webRequest.onBeforeRequest.addListener(rewrite,
     {
         urls: [
-            "*://www.google.com/*",
-            "*://www.google.co.jp/*"
+            "*://www.google.com/search?*",
+            "*://www.google.co.jp/search?*"
         ],
         types: ["main_frame", "sub_frame"]
     },
