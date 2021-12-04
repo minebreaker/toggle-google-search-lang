@@ -1,6 +1,6 @@
 {
   "name": "toggle-google-search",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Toggle google search language",
   "main": "index.js",
   "scripts": {
