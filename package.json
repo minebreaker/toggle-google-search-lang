@@ -9,7 +9,7 @@
     "clean": "rimraf build",
     "compile": "npm run compile-popup && npm run compile-background",
     "compile-popup": "esbuild src/popup.tsx --bundle --minify --sourcemap --target=chrome99,firefox93 --outfile=build/out/popup.js",
-    "compile-background":  "esbuild src/background.ts --bundle --minify --sourcemap --target=chrome99,firefox93 --outfile=build/out/background.js",
+    "compile-background": "esbuild src/background.ts --bundle --minify --sourcemap --target=chrome99,firefox93 --outfile=build/out/background.js",
     "typecheck": "tsc --noEmit",
     "copy": "npm run copy-index && npm run copy-manifest",
     "copy-index": "cpx src/index.html ./build/out",
@@ -23,7 +23,8 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-jss": "^10.8.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.177",

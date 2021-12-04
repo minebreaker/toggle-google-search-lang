@@ -1,11 +1,20 @@
 import React, {useState} from "react"
 import ReactDOM from "react-dom"
+import {createUseStyles} from "react-jss"
 
 type Lang = "en" | "ja" | "default"
 
 declare const chrome: any
 
+const useStyles = createUseStyles({
+    "body": {
+        "margin": "1rem"
+    }
+})
+
 function App() {
+    const classes = useStyles()
+
     const [checked, setChecked] = useState<Lang>("default")
     const onChange = (lang: Lang) => {
         setChecked(lang)
@@ -27,7 +36,7 @@ function App() {
     }
 
     return (
-        <div>
+        <div className={classes.body}>
             <div className="form-check">
                 <input id="lr_en" className="form-check-input" type="radio" name="lang"
                        checked={checked === "en"}
