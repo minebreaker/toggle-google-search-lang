@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import ReactDOM from "react-dom"
 import {createUseStyles} from "react-jss"
 
@@ -34,6 +34,15 @@ function App() {
             chrome.tabs.reload(tab.id)
         })
     }
+
+    // Load saved settings
+    useEffect(() => {
+        chrome.storage.sync.get("lang", (result: any) => {
+            if (result && result["lang"]) {
+                setChecked(result["lang"])
+            }
+        })
+    }, [chrome, setChecked])
 
     return (
         <div className={classes.body}>
