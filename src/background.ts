@@ -1,19 +1,12 @@
-function awaiting<T>(f: (cb: (result: T) => void) => void): T {
-    let result = null
-    f(r => {
-        result = r
-    })
+export {}
 
-    while(!result) {
-        // NOP
-    }
+type Lang = "en" | "ja" | "default"
 
-    return result
-}
+declare const chrome: any
 
 let savedLang: Lang
 
-const regAscii = /^[\x00-\x7F]*$/
+let prevUrl = ""
 
 function rewrite(request: any): any | void {
 
@@ -27,30 +20,17 @@ function rewrite(request: any): any | void {
     } else if (savedLang === "default") {
         params.delete("lr")
     } else {  // Auto detect
-
-        const query = params.get("q") || ""
-        const detectedLang = awaiting<any>(cb => chrome.i18n.detectLanguage(query, (l: any) => cb(l)))
-        console.log(detectedLang)
-        if (detectedLang.languages[0]) {
-            const code = detectedLang.languages[0].language
-            // After few tries, I found detectLanguage() is unreliable,
-            // Assumes it's english if not ja.
-            // Kanjis are often detected as chinese falsely, force setting japanese.
-            if (code !== 'ja' && code !== 'zh') {
-                params.set("lr", "lang_en")
-            } else {
-                params.set("lr", `lang_${code}`)
-            }
-        } else {
-            if (regAscii.test(query)) {
-                params.set("lr", "lang_en")
-            } else {
-                params.set("lr", "lang_ja")
-            }
-        }
+        return
     }
 
-    return {redirectUrl: url.toString()}
+    const urlStr = url.toString()
+    if (urlStr === prevUrl) {
+        // If the url is the same as previous one, don't redirect to it so to prevent infinite redirecting.
+        return
+    }
+
+    prevUrl = urlStr
+    return {redirectUrl: urlStr}
 }
 
 chrome.webRequest.onBeforeRequest.addListener(rewrite,
@@ -64,8 +44,8 @@ chrome.webRequest.onBeforeRequest.addListener(rewrite,
     ["blocking"]
 )
 
-chrome.storage.sync.onChanged.addListener((result: any) => {
-    if (result && result.lang && result.lang.newValue) {
-        savedLang = result.lang.newValue
+chrome.storage.onChanged.addListener((changes: any) => {
+    if (changes && changes.lang && changes.lang.newValue) {
+        savedLang = changes.lang.newValue
     }
 })
