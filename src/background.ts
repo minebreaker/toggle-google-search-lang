@@ -1,6 +1,4 @@
-export {}
-
-type Lang = "en" | "ja" | "default"
+import {Lang, storageKeys} from "./shared"
 
 declare const chrome: any
 
@@ -11,9 +9,9 @@ async function rewrite(request: any): Promise<any> {
     const url = new URL(request.url)
     const params = url.searchParams
     const result: any = await new Promise(resolve => {
-        chrome.storage.sync.get("lang", resolve)
+        chrome.storage.sync.get(storageKeys.lang, resolve)
     })
-    const savedLang: Lang = result ? result["lang"] as Lang : "default"
+    const savedLang: Lang = result ? result[storageKeys.lang] as Lang : "default"
 
     if (savedLang === "en") {
         params.set("lr", "lang_en")

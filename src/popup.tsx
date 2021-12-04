@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react"
 import ReactDOM from "react-dom"
 import {createUseStyles} from "react-jss"
-
-type Lang = "en" | "ja" | "default"
+import {Lang, storageKeys} from "./shared"
 
 declare const chrome: any
 
@@ -37,9 +36,9 @@ function App() {
 
     // Load saved settings
     useEffect(() => {
-        chrome.storage.sync.get("lang", (result: any) => {
-            if (result && result["lang"]) {
-                setChecked(result["lang"])
+        chrome.storage.sync.get(storageKeys.lang, ({lang}: any) => {
+            if (lang) {
+                setChecked(lang)
             }
         })
     }, [chrome, setChecked])
