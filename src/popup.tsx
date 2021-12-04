@@ -46,7 +46,7 @@ function App() {
                 setCountry(country)
             }
         })
-    }, [chrome, setLang, setCountry])
+    }, [setLang, setCountry])
 
     return (
         <div className={classes.body}>
