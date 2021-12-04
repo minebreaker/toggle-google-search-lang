@@ -14,7 +14,8 @@
   ],
   "browser_action": {
     "default_title": "Toggle google search language",
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_icon": "icon.svg"
   },
   "background": {
     "scripts": [
