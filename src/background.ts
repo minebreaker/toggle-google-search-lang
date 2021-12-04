@@ -4,23 +4,23 @@ type Lang = "en" | "ja" | "default"
 
 declare const chrome: any
 
-let savedLang: Lang
-
 let prevUrl = ""
 
-function rewrite(request: any): any | void {
+async function rewrite(request: any): Promise<any> {
 
     const url = new URL(request.url)
     const params = url.searchParams
+    const result: any = await new Promise(resolve => {
+        chrome.storage.sync.get("lang", resolve)
+    })
+    const savedLang: Lang = result ? result["lang"] as Lang : "default"
 
     if (savedLang === "en") {
         params.set("lr", "lang_en")
     } else if (savedLang === "ja") {
         params.set("lr", "lang_ja")
-    } else if (savedLang === "default") {
+    } else {
         params.delete("lr")
-    } else {  // Auto detect
-        return
     }
 
     const urlStr = url.toString()
@@ -43,9 +43,3 @@ chrome.webRequest.onBeforeRequest.addListener(rewrite,
     },
     ["blocking"]
 )
-
-chrome.storage.onChanged.addListener((changes: any) => {
-    if (changes && changes.lang && changes.lang.newValue) {
-        savedLang = changes.lang.newValue
-    }
-})
