@@ -1,4 +1,4 @@
-import {Lang, storageKeys} from "./shared"
+import {Country, Lang, storageKeys} from "./shared"
 
 declare const chrome: any
 
@@ -9,9 +9,10 @@ async function rewrite(request: any): Promise<any> {
     const url = new URL(request.url)
     const params = url.searchParams
     const result: any = await new Promise(resolve => {
-        chrome.storage.sync.get(storageKeys.lang, resolve)
+        chrome.storage.sync.get(null, resolve)
     })
     const savedLang: Lang = result ? result[storageKeys.lang] as Lang : "default"
+    const savedCountry: Country = result ? result[storageKeys.country] as Country : "default"
 
     if (savedLang === "en") {
         params.set("lr", "lang_en")
@@ -19,6 +20,13 @@ async function rewrite(request: any): Promise<any> {
         params.set("lr", "lang_ja")
     } else {
         params.delete("lr")
+    }
+    if (savedCountry === "US") {
+        params.set("cr", "countryUS")
+    } else if (savedCountry === "JP") {
+        params.set("cr", "countryJP")
+    } else {
+        params.delete("cr")
     }
 
     const urlStr = url.toString()
