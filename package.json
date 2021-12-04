@@ -1,10 +1,10 @@
 {
   "name": "toggle-google-search",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Toggle google search language",
   "main": "index.js",
   "scripts": {
-    "build": "npm run compile && npm run copy",
+    "build": "npm run assemble",
     "assemble": "npm run compile && npm run copy",
     "clean": "rimraf build",
     "compile": "npm run compile-popup && npm run compile-background",
